@@ -1,4 +1,4 @@
-package simplex;
+//package Simplex;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,45 +8,38 @@ import java.util.List;
 import java.util.Scanner;
 //import javax.swing.JOptionPane;
 
-public class SimplexUtils {
+public class App {
 
-	// qtd variaveis de decisao
-	// qtd restricoes
-	// list com valores de decisao X
-	// equivalencia da FO
-	// list da list com valores das restricoes
-	// list de equivalencia das restricoes
-    public static void calcularAlgoritmoSimplex() {
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        Scanner scanner = new Scanner(System.in); 
-        //JOptionPane input = new JOptionPane();
+        Scanner scanner = new Scanner(System.in);
 
         boolean seguir = true;
-        int subindice = 1; 
+        int subindice = 1;
         double coef = 0;
-        int sim = 0;
-        int qtdRestricoes = 0;
-        double valorComprovar = 0;
+        int sim;
+        int qtdRestricoes;
+        double valorComprovar;
 
-        String apresentacao = "";
+        String apresentacao;
         String funcao = "";
+
+        List<Double> coeficientesFOS = new ArrayList<Double>();
+        List<Integer> posicoesNegativos = new ArrayList<Integer>();
         
         System.out.println("Algoritmo Simmplex");
         System.out.println("-- Recepção dos dados --");
-        System.out.println("Por favor Insira a função objetivo:");
+        System.out.println("Por favor insira a função objetivo:");
         while (seguir == true) {
             System.out.print("Valor para x" + subindice + " :");
             coef = scanner.nextInt();
-            //coef = Double.parseDouble(JOptionPane.showInputDialog("Valor para x" + subindice + " :"));
             coeficientesFOS.add(coef);
             subindice++;
             System.out.print("Insira 1 para seguir adicionando variáveis: ");
             sim = scanner.nextInt();
-            //sim = Integer.parseInt(JOptionPane.showInputDialog("Insira 1 para seguir adicionando variáveis"));
             if (sim != 1) {
                 System.out.println("Insira a equivalência da equação: ");
                 coef = scanner.nextInt();
-                //coef = Double.parseDouble(JOptionPane.showInputDialog("Insira a equivalência da equação: "));
                 coeficientesFOS.add(coef);
                 seguir = false;
             }
@@ -68,7 +61,6 @@ public class SimplexUtils {
        // JOptionPane.showMessageDialog(null, funcao, "Função", JOptionPane.WARNING_MESSAGE);
         System.out.println("Insira o número de restrições: ");
         qtdRestricoes = scanner.nextInt();
-        //qtdRestricoes = Integer.parseInt(JOptionPane.showInputDialog("Insira o número de restrições: "));
         double matrizRestSimnAjustar[][] = new double[qtdRestricoes][coeficientesFOS.size()];
         int simgnoIgualdades[] = new int[qtdRestricoes];
 
@@ -77,11 +69,9 @@ public class SimplexUtils {
             for (int j = 0; j < coeficientesFOS.size() - 1; j++) {
                 System.out.print("Insira o valor de x" + (j + 1) + ": ");
                 matrizRestSimnAjustar[i][j] = scanner.nextInt();
-                //matrizRestSimnAjustar[i][j] = Integer.parseInt(JOptionPane.showInputDialog("Insira o valor de x" + (j + 1) + ": "));
                 if (j + 1 == coeficientesFOS.size() - 1) {
                     System.out.print("Insira o sinal de igualdade/desigualdade: <=(1), =(2), >=(3) ");
                     simgnoIgualdades[i] = scanner.nextInt();
-                	//sinalIgualdade[i] = Integer.parseInt(JOptionPane.showInputDialog("Insira o sinal de igualdade/desigualdade: <=(1), =(2), >=(3) "));
                     System.out.print("Insira o resultado da equação: ");
                     matrizRestSimnAjustar[i][j + 1] = scanner.nextInt();
                 }
@@ -91,7 +81,6 @@ public class SimplexUtils {
         int val = 0;
         System.out.println("Deverá Maximizar ou Minimizar a equação?");
         System.out.println("(1) Maximizar (2) Minimizar");
-        //val = Integer.parseInt(JOptionPane.showInputDialog("Deverá Maximizar ou Minimizar a equação? (1) Maximizar (2) Minimizar"));
         val = scanner.nextInt();
 
         if (val == 1) {
@@ -100,14 +89,15 @@ public class SimplexUtils {
             }
         }
 
-        System.out.println("--------Original-------");
-        for (int i = 0; i < matrizRestSimnAjustar.length; i++) {
-            for (int j = 0; j < matrizRestSimnAjustar[i].length; j++) {
-                System.out.print(matrizRestSimnAjustar[i][j] + "\t");
-            }
-            System.out.println();
-        }
-
+        /*System.out.println("--------Original-------");
+        *for (int i = 0; i < matrizRestSimnAjustar.length; i++) {
+        *    for (int j = 0; j < matrizRestSimnAjustar[i].length; j++) {
+        *        System.out.print(matrizRestSimnAjustar[i][j] + "\t");
+        *    }
+        *    System.out.println();
+        *}
+        */
+        
         // Contem as desigualdades para ajustes
         int numAjustes = 0;
         for (int j = 0; j < simgnoIgualdades.length; j++) {
@@ -215,7 +205,7 @@ public class SimplexUtils {
             }
             posicoesNegativos.add(posicao);
 
-            // Se possui dois valores negativos, mantem suas duas posições
+            // Eu possui dois valores negativos, mantem suas duas posições
             for (int j = 0; j < coeficientesFO.size(); j++) {
                 if (coeficientesFO.get(j) == menor) {
                     posicoesNegativos.add(j);
@@ -320,13 +310,8 @@ public class SimplexUtils {
             }
 
         }
-        
-        scanner.close();
-        try {
-			br.close();
-		} catch (IOException e) {
-			
-		}
 
+        br.close();
+        scanner.close();
     }
 }
